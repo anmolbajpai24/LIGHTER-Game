@@ -28,17 +28,7 @@ public class ScorePerSecond : MonoBehaviour
     {
         
         score.text = (int)scoreAmount + "";
-        /*
-        highscore = (int) scoreAmount;
-
-        if(PlayerPrefs.GetInt("scoreAmount")<=highscore)
-        {
-            PlayerPrefs.SetInt("scoreAmount", highscore);
-        }
-        PlayerPrefs.SetInt("score", highscore);
-
-        highscoreText.text = (int)highscore + "";
-        */
+    
 
         StartScore();
     }
@@ -50,7 +40,7 @@ public class ScorePerSecond : MonoBehaviour
 
     public void StartScore()
     {
-        //InvokeRepeating("IncrementScore", 1f, 1f);
+        
         scoreAmount = scoreAmount + Time.deltaTime;
     }
 
@@ -58,23 +48,7 @@ public class ScorePerSecond : MonoBehaviour
     {
         //CancelInvoke("StartScore");
 
-        
-
-        PlayerPrefs.SetFloat("score", scoreAmount);
-
-        if(PlayerPrefs.HasKey("highscore"))
-        {
-            if (scoreAmount > PlayerPrefs.GetInt("highscore"))
-            {
-                PlayerPrefs.SetFloat("highscore", scoreAmount);
-
-            }
-        }
-
-        else
-        {
-            PlayerPrefs.SetFloat("highscore", scoreAmount);
-        }
+       
         
     }
 

@@ -22,15 +22,16 @@ public class CollisionDestroy : MonoBehaviour
 
             lighterSpawn.SetStopSpawningTrue();
 
-            ScorePerSecond.instance.StopScore();
+            //ScorePerSecond.instance.StopScore();
 
-            GameOver();
+            GameManager.instance.EndGame();
+           // GameOver();
         }
     }
     
     public void GameOver()
     {
-        SceneManager.LoadScene("GameOver");
+        //SceneManager.LoadScene("GameOver");
         //ScorePerSecond.instance.StopScore();
         //GameManager.instance.EndGame();
 

@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public void Awake()
+    {
+        instance = this;
+    }
+
     public bool GameOver;
-   
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +35,8 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        ScorePerSecond.instance.StopScore();
+        SceneManager.LoadScene("GameOver");
+       // ScorePerSecond.instance.StopScore();
 
     }
 }

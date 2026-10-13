@@ -19,10 +19,10 @@ if ($UseShortJavaSocketPath) {
     $socketRoot = Join-Path $projectRoot '.build-temp'
     if ($socketRoot.Length -gt 75) { throw 'Use a shorter project path for the Java socket workaround (project plus .build-temp must be <= 75 characters).' }
     New-Item -ItemType Directory -Path $socketRoot -Force | Out-Null
-    $option = ' "-Djdk.net.unixdomain.tmpdir=' + $socketRoot + '"'
-    # Assign the child environment explicitly; do not change user or system settings.
-    $info.EnvironmentVariables['JAVA_TOOL_OPTIONS'] = ($env:JAVA_TOOL_OPTIONS + $option).Trim()
-    $info.EnvironmentVariables['_JAVA_OPTIONS'] = ($env:_JAVA_OPTIONS + $option).Trim()
+    # Keep the workaround process-local. Java inherits this short temp directory.
+    # Avoid Java option variables: their stderr banner breaks Android CMake detection.
+    $info.EnvironmentVariables['TEMP'] = $socketRoot
+    $info.EnvironmentVariables['TMP'] = $socketRoot
 }
 Write-Output ("Started {0:o}: {1}. Log: {2}" -f (Get-Date), $Target, $logPath)
 $process = [System.Diagnostics.Process]::Start($info)

@@ -1,46 +1,30 @@
-using System.Collections;
-
-using System.Collections.Generic;
-
 using UnityEngine;
-
 using UnityEngine.AI;
 
 public class EnemyFollowing : MonoBehaviour
-
 {
     public NavMeshAgent enemy;
-
     public Transform Player;
-
-    
-
-    //public int speed;
-
-    //public GameObject player;
-
-    void Start()
-
+    private float nextPath;
+    private void Awake()
     {
-        
-            Player = GameObject.FindGameObjectWithTag("Player").transform;
-        
-        //Player = GameObject.FindWithTag("Player");
-
-        //transform.Rotate(180, 0, 0);
-
+        enemy = GetComponent<NavMeshAgent>();
+        var body = GetComponent<Rigidbody>();
+        if (body != null) { body.isKinematic = true; body.useGravity = false; }
+        enemy.radius = .18f;
+        enemy.height = .9f;
+        enemy.angularSpeed = 360;
+        enemy.acceleration = 10;
+        enemy.avoidancePriority = Random.Range(25, 75);
     }
-
-    void Update()
-
+    private void Start() { var player = GameObject.FindGameObjectWithTag("Player"); if (player != null) Player = player.transform; }
+    private void Update()
     {
-        if (Player)
-        {
-            enemy.SetDestination(Player.position);
-
-        }
-        //transform.position = Vector3.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-
+        if (enemy == null || !enemy.isOnNavMesh) return;
+        bool playing = GameManager.instance != null && GameManager.instance.IsPlaying && Player != null;
+        enemy.isStopped = !playing;
+        if (!playing) return;
+        enemy.speed = 1.15f + (GameManager.instance.Session.Heat - 1) * .19f;
+        if (Time.time >= nextPath) { enemy.SetDestination(Player.position); nextPath = Time.time + .15f; }
     }
-
 }

@@ -1,56 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Retains the original scene's serialized references; GameManager owns the clock.
 public class ScorePerSecond : MonoBehaviour
 {
     public static ScorePerSecond instance;
-
-    public void Awake()
-    {
-        instance = this;
-    }
     public Text score;
     public float scoreAmount;
-  //  public Text highscoreText;
-
     public int highscore;
-
-    void Start()
+    private void Awake() { instance = this; }
+    private void Update()
     {
-        scoreAmount = 1f;
-        PlayerPrefs.SetFloat("score", scoreAmount);
+        if (GameManager.instance == null) return;
+        scoreAmount = GameManager.instance.Session.Seconds;
+        highscore = GameManager.BestScore;
+        if (score != null) score.text = ((int)scoreAmount).ToString();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-        score.text = (int)scoreAmount + "";
-    
-
-        StartScore();
-    }
-
-    void IncrementScore()
-    {
-        //scoreAmount = scoreAmount + 1;
-    }
-
-    public void StartScore()
-    {
-        
-        scoreAmount = scoreAmount + Time.deltaTime;
-    }
-
-    public void StopScore()
-    {
-        //CancelInvoke("StartScore");
-
-       
-        
-    }
-
-
+    public void StartScore() { if (GameManager.instance != null) GameManager.instance.StartGame(); }
+    public void StopScore() { }
+    private void OnDestroy() { if (instance == this) instance = null; }
 }

@@ -1,33 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-
     public GameObject target;
-
-    private Vector3 offset;
-
-    private void Awake()
+    private Camera arenaCamera;
+    private void Start()
     {
-        target = GameObject.FindWithTag("Player");
+        arenaCamera = GetComponent<Camera>();
+        transform.position = new Vector3(10, 14, -12);
+        transform.LookAt(new Vector3(0, 0, 0));
+        arenaCamera.orthographic = true;
+        arenaCamera.clearFlags = CameraClearFlags.SolidColor;
+        arenaCamera.backgroundColor = new Color(.025f, .035f, .06f);
     }
-    // Start is called before the first frame update
-    void Start()
+    private void LateUpdate()
     {
-        if(target)
-        {
-            offset = transform.position - target.transform.position;
-        }
-    }
-
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        if(target)
-        {
-            transform.position = target.transform.position + offset;
-        }
+        // The full arena stays in view on phones and narrow desktop windows.
+        arenaCamera.orthographicSize = Mathf.Max(7.2f, 8.3f / arenaCamera.aspect);
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-// TESTING
 public class CameraFollow : MonoBehaviour
 {
     public GameObject target;
